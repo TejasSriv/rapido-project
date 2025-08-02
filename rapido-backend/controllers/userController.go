@@ -73,7 +73,7 @@ func UserSignup(c *gin.Context) {
 
 func UserLogin(c *gin.Context) {
 	var body struct {
-		Email    string `json:"email" binding:"required, email"`
+		Email    string `json:"email" binding:"required"`
 		Password string `json:"password" binding:"required"`
 	}
 
@@ -141,7 +141,7 @@ func UpdateUserProfile(c *gin.Context) {
 
 	var body struct {
 		Username    string `json:"username"`
-		Email       string `json:"email" binding:"email"`
+		Email       string `json:"email"`
 		FullName    string `json:"fullName"`
 		PhoneNumber string `json:"phoneNumber"`
 		Password    string `json:"password"`
