@@ -3,6 +3,7 @@ package main
 import (
 	"rapido-backend/controllers"
 	"rapido-backend/initializers"
+	"rapido-backend/middlewares"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,13 +19,23 @@ func main() {
 	r.POST("/signup", controllers.UserSignup)
 	r.POST("/login", controllers.UserLogin)
 
-	r.GET("/users/:id", controllers.GetUserProfile)
-	r.PUT("/users/:id", controllers.UpdateUserProfile)
+	authenticated := r.Group("/")
+	authenticated.Use(middlewares.AuthRequired)
+	{
+		authenticated.GET("/users/:id", controllers.GetUserProfile)
+		authenticated.PUT("/users/:id", controllers.UpdateUserProfile)
 
-	r.POST("/rides", controllers.CreateRide)
-	r.GET("/rides/:id", controllers.GetRideDetails)
-	r.GET("/users/:id/rides", controllers.GetUserRides)
-	r.PUT("/rides/:id/cancel", controllers.CancelRide)
+		authenticated.POST("/rides", controllers.CreateRide)
+		authenticated.GET("/rides/:id", controllers.GetRideDetails)
+		authenticated.GET("/users/:id/rides", controllers.GetUserRides)
+		authenticated.PUT("/rides/:id/cancel", controllers.CancelRide)
+	}
+
+	admin := r.Group("/admin")
+	admin.Use(middlewares.AuthRequired, middlewares.AdminRequired())
+	{
+		// Admin APIs
+	}
 
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
