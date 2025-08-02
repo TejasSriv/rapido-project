@@ -34,7 +34,10 @@ func main() {
 	admin := r.Group("/admin")
 	admin.Use(middlewares.AuthRequired, middlewares.AdminRequired())
 	{
-		// Admin APIs
+		admin.GET("/rides", controllers.ViewAllRides)
+		admin.PUT("/rides/:id/status", controllers.AdminUpdateRideStatus)
+		admin.GET("/analytics/rides-per-day", controllers.GetRideAnalytics)
+		admin.GET("/rides/filter", controllers.FilterRides)
 	}
 
 	r.GET("/", func(c *gin.Context) {
