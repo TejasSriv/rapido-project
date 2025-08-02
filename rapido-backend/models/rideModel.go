@@ -20,9 +20,6 @@ type Ride struct {
 	CompletedAt     *time.Time `json:"completedAt,omitempty"`
 	CancelledAt     *time.Time `json:"cancelledAt,omitempty"`
 	AdminNotes      string     `gorm:"type:text" json:"adminNotes,omitempty"`
-
-	User   User `gorm:"foreignKey:UserID"`
-	Driver User `gorm:"foreignKey:DriverID"`
 }
 
 func (Ride) TableName() string {
