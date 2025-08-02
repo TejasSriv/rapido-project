@@ -73,10 +73,10 @@ func GetRideDetails(c *gin.Context) {
 }
 
 func GetUserRides(c *gin.Context) {
-	userIDStr := c.Param("userId")
+	userIDStr := c.Param("id")
 	userID, err := uuid.Parse(userIDStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID", "errorMessage": err.Error()})
 		return
 	}
 
@@ -112,7 +112,7 @@ func CancelRide(c *gin.Context) {
 
 	// only cancel if ride is pending ro accepted
 	if ride.CurrentStatus != "pending" && ride.CurrentStatus != "accepted" {
-		c.JSON(http.StatusConflict, gin.H{"error": "Cannot cancel a ride."})
+		c.JSON(http.StatusConflict, gin.H{"error": "Cannot cancel ride."})
 		return
 	}
 
